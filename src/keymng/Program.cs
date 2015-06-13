@@ -95,7 +95,7 @@ namespace keymng
 				Console.Write("Mark is used?   ");
 				if (Console.ReadLine().ToLower().Contains("y"))
 				{
-					//mark as used
+					//todo mark as used
 					Console.WriteLine("Marking as used. Press key to reset");
 				}
 				Console.WriteLine("\nNOT Marking as used. Press key to reset\n");
