@@ -13,3 +13,4 @@ Build/Run crossplatform to DNX core
 
 ![:'(](readmeB.png)
 ![:'(](readmeA.png)
+![:'(](readmeC.png)
