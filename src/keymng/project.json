@@ -10,7 +10,8 @@
 		"System.Xml.XmlDocument": "4.0.0-beta-22816",
 		"System.IO.FileSystem": "4.0.0-beta-22816",
 		"Newtonsoft.Json": "7.0.1-beta3",
-		"System.Xml.XmlSerializer": "4.0.10-beta-22816"
+		"System.Xml.XmlSerializer": "4.0.10-beta-22816",
+		"System.Diagnostics.Debug": "4.0.10-beta-22816"
 	},
 
 	"commands": {

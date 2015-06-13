@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -33,14 +34,22 @@ namespace keymng
 				foreach (var key in x.ChildNodes)
 				{
 					var y = (XmlElement)key;
-					keymodel.Keys.Add(new Models.Key
-					{
-						ID = y.Attributes["ID"].InnerText,
-						Type = y.Attributes["Type"].InnerText,
-						ClaimedDate = y.Attributes["ClaimedDate"].InnerText,
-						Value = y.InnerText
-					});
+					var usd = y?.Attributes["IsUsed"]?.InnerText;
 
+					if ((new List<string> { "TRUE", "true", "True" }).Contains(usd) != true) //casting .tolower would break if null
+					{
+						keymodel.Keys.Add(new Models.Key
+						{
+							ID = y.Attributes["ID"].InnerText,
+							Type = y.Attributes["Type"].InnerText,
+							ClaimedDate = y.Attributes["ClaimedDate"].InnerText,
+							Value = y.InnerText
+						});
+					}
+					else
+					{
+						Debug.WriteLine("Skipped used key");
+					}
 				}
 				obj.Product_Keys.Add(keymodel);
 
