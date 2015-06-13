@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "keymng": {
+      "commandName": "keymng",
+      "workingDirectory": "F:\\Workbench\\keymng"
+    }
+  }
+}
