@@ -11,7 +11,9 @@ namespace keymng
         public void Main(string[] args)
         {
 			XmlDocument itemDoc = new XmlDocument();
-			itemDoc.Load(@"KeysExport.xml");
+			itemDoc.LoadXml(@"KeysExport.xml");
+
+
 
 		}
     }
