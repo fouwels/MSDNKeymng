@@ -13,9 +13,10 @@ namespace keymng
 {
 	public class Program
 	{
-		public void Main(string[] args)
+		const string fileName = "KeysExport.xml";
+        public void Main(string[] args)
 		{
-			var xml = File.ReadAllText(@"KeysExport.xml"); //yahyah, streamreading is faster, I know
+			var xml = File.ReadAllText(fileName); //yahyah, streamreading is faster, I know
 
 			var xmldoc = new XmlDocument();
 			xmldoc.LoadXml(xml);
@@ -58,10 +59,20 @@ namespace keymng
 			while (true)
 			{
 				//Console.Clear(); // no console.clear in dnx core, wut?
+
+				List<Models.Product_Key> products = new List<Models.Product_Key>();
 				Console.WriteLine("Enter name of product");
 
-				var input = Console.ReadLine();
-				var products = obj.Product_Keys.Where(x => x.Name.ToLower().Contains(input)).ToList();
+				while (products.Count == 0)
+				{
+					var input = Console.ReadLine();
+					products = obj.Product_Keys.Where(x => x.Name.ToLower().Contains(input)).ToList();
+
+					if (products.Count == 0)
+					{
+						Console.WriteLine("Product not found, try again");
+					}
+				}
 				Console.WriteLine("found:");
 
 				var index = 0;
@@ -88,17 +99,46 @@ namespace keymng
 					}
 				}
 
-				Console.WriteLine("\n==========");
-				Console.WriteLine(JsonConvert.SerializeObject(selectedProduct.Keys.FirstOrDefault(), Newtonsoft.Json.Formatting.Indented));
-				Console.WriteLine("==========\n");
+				var latestKey = selectedProduct.Keys.FirstOrDefault();
 
-				Console.Write("Mark is used?   ");
-				if (Console.ReadLine().ToLower().Contains("y"))
+				if (latestKey != null)
 				{
-					//todo mark as used
-					Console.WriteLine("Marking as used. Press key to reset");
+					Console.WriteLine("\n==========");
+					Console.WriteLine(JsonConvert.SerializeObject(latestKey, Newtonsoft.Json.Formatting.Indented));
+					Console.WriteLine("==========\n");
+
+					Console.Write("Mark is used? [Y/N]  ");
+					if (Console.ReadLine().ToLower().Contains("y"))
+					{
+						Console.WriteLine("Marking as used. Press key to reset [ignore. disabled due to rendering junk in the xml, will fix later]");
+						//mark as used
+						foreach (var x in xmldoc.DocumentElement.ChildNodes)
+						{
+							foreach (var key in ((XmlElement)x).ChildNodes)
+							{
+								if (((XmlElement)key)?.InnerText == latestKey.Value)
+								{
+									((XmlElement)key).SetAttribute("IsUsed", "TRUE");
+								}
+							}
+
+							//File.WriteAllText(fileName, xmldoc.Value );
+							
+						}
+					}
+					else
+					{
+						Console.WriteLine("\nNOT Marking as used. Press key to reset\n");
+					}
 				}
-				Console.WriteLine("\nNOT Marking as used. Press key to reset\n");
+				else
+				{
+					Console.WriteLine("\n==========");
+					Console.WriteLine("No product keys remaining for this product");
+					Console.WriteLine("==========\n");
+
+					Console.WriteLine("Press key to reset\n");
+				}
 
 				Console.ReadLine();
 
