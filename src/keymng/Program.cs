@@ -1,4 +1,5 @@
 ﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -52,6 +53,54 @@ namespace keymng
 					}
 				}
 				obj.Product_Keys.Add(keymodel);
+			}
+
+			while (true)
+			{
+				//Console.Clear(); // no console.clear in dnx core, wut?
+				Console.WriteLine("Enter name of product");
+
+				var input = Console.ReadLine();
+				var products = obj.Product_Keys.Where(x => x.Name.ToLower().Contains(input)).ToList();
+				Console.WriteLine("found:");
+
+				var index = 0;
+				foreach (var irem in products)
+				{
+					Console.WriteLine(index.ToString() + ": " + irem.Name);
+					index++;
+				}
+				Console.WriteLine("Enter index of product");
+
+				var validEntrySelected = false;
+				Models.Product_Key selectedProduct = new Models.Product_Key();
+
+                while (validEntrySelected == false)
+				{
+					try
+					{
+						selectedProduct = products[Convert.ToInt32(Console.ReadLine())];
+						validEntrySelected = true;
+					}
+					catch
+					{
+						Console.WriteLine("You suck... try again");
+					}
+				}
+
+				Console.WriteLine("\n==========");
+				Console.WriteLine(JsonConvert.SerializeObject(selectedProduct.Keys.FirstOrDefault(), Newtonsoft.Json.Formatting.Indented));
+				Console.WriteLine("==========\n");
+
+				Console.Write("Mark is used?   ");
+				if (Console.ReadLine().ToLower().Contains("y"))
+				{
+					//mark as used
+					Console.WriteLine("Marking as used. Press key to reset");
+				}
+				Console.WriteLine("\nNOT Marking as used. Press key to reset\n");
+
+				Console.ReadLine();
 
 			}
 		}
